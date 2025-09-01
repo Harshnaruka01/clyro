@@ -3,8 +3,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Feed from "./components/Feed";
+import PostDetail from "./components/PostDetail";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import { PostsProvider } from "./context/PostsContext";
 
 export default function App() {
   const [user, setUser] = useState(localStorage.getItem('user') || null);
@@ -22,17 +24,22 @@ export default function App() {
 
   // If user is logged in, show main app
   return (
-    <Routes>
-      <Route path="/" element={
-        <div className="flex h-screen">
-          <Sidebar />
-          <div className="flex flex-col flex-1">
-            <Navbar user={user} setUser={setUser} />
-            <Feed />
-          </div>
-        </div>
-      } />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <PostsProvider>
+      <div className="min-h-screen bg-gray-900">
+        <Routes>
+          <Route path="/" element={
+            <div className="flex h-screen">
+              <Sidebar />
+              <div className="flex flex-col flex-1">
+                <Navbar user={user} setUser={setUser} />
+                <Feed />
+              </div>
+            </div>
+          } />
+          <Route path="/post/:postId" element={<PostDetail />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </PostsProvider>
   );
 }
