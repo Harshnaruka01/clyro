@@ -11,12 +11,19 @@ export default function PostDetail() {
   const [photoLikes, setPhotoLikes] = useState({});
   const [photoComments, setPhotoComments] = useState({});
   const [commentInputs, setCommentInputs] = useState({});
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editedTitle, setEditedTitle] = useState('');
 
   useEffect(() => {
     // Find the post by ID
     const foundPost = posts.find(p => p.id === parseInt(postId));
     if (foundPost) {
-      setPost(foundPost);
+      // If this is the first post (id === 1), set its title to 'lakshya 2k25'
+      if (foundPost.id === 1) {
+        setPost({ ...foundPost, title: 'lakshya 2k25' });
+      } else {
+        setPost(foundPost);
+      }
     } else {
       // If post not found, redirect to home
       navigate('/');
@@ -105,7 +112,35 @@ export default function PostDetail() {
               </svg>
               Back to Feed
             </button>
-            <h1 className="text-lg font-semibold text-white">{post.title}</h1>
+            <div className="flex items-center gap-2">
+              {isEditingTitle ? (
+                <input
+                  type="text"
+                  value={editedTitle}
+                  onChange={e => setEditedTitle(e.target.value)}
+                  className="text-lg font-semibold px-2 py-1 rounded text-black"
+                  autoFocus
+                  onBlur={() => setIsEditingTitle(false)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      setPost(prev => ({ ...prev, title: editedTitle }));
+                      setIsEditingTitle(false);
+                    }
+                  }}
+                />
+              ) : (
+                <>
+                  <h1 className="text-lg font-semibold text-white">{post.title}</h1>
+                  <button
+                    className="ml-2 px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
+                    onClick={() => {
+                      setEditedTitle(post.title);
+                      setIsEditingTitle(true);
+                    }}
+                  >Edit</button>
+                </>
+              )}
+            </div>
             <div className="w-20"></div> {/* Spacer for centering */}
           </div>
         </div>
