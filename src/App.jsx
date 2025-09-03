@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Feed from "./components/Feed";
 import PostDetail from "./components/PostDetail";
+import Profile from "./components/Profile";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import { PostsProvider } from "./context/PostsContext";
@@ -33,6 +34,17 @@ export default function App() {
               <div className="flex flex-col flex-1">
                 <Navbar user={user} setUser={setUser} />
                 <Feed />
+              </div>
+            </div>
+          } />
+          <Route path="/profile" element={
+            <div className="flex h-screen">
+              <Sidebar />
+              <div className="flex flex-col flex-1">
+                <Navbar user={user} setUser={setUser} />
+                <div className="flex-1 overflow-y-auto">
+                  <Profile />
+                </div>
               </div>
             </div>
           } />
