@@ -1,6 +1,6 @@
 import { Bell, LogOut } from "lucide-react";
 
-export default function Navbar({ user, setUser }) {
+export default function Navbar({ user, setUser, profilePicture }) {
   const handleLogout = () => {
     localStorage.removeItem('user');
     setUser(null);
@@ -30,9 +30,9 @@ export default function Navbar({ user, setUser }) {
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-300">{getUserName()}</span>
           <img
-            src="https://i.pravatar.cc/40"
+            src={profilePicture || "https://i.pravatar.cc/40"}
             alt="User"
-            className="w-10 h-10 rounded-full border-2 border-gray-600"
+            className="w-10 h-10 rounded-full border-2 border-gray-600 object-cover"
           />
           <button
             onClick={handleLogout}

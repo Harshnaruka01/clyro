@@ -1,21 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Camera, Edit3, MapPin, Calendar, Mail, Phone, Globe, Users, Heart, MessageCircle } from 'lucide-react';
 
-export default function Profile() {
+export default function Profile({ profilePicture, setProfilePicture, backgroundPhoto, setBackgroundPhoto }) {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: 'John Doe',
-    username: '@johndoe',
+    name: '',
+    username: '',
     bio: 'Photographer & Digital Creator | Capturing moments that matter ✨',
     location: 'New York, USA',
     website: 'www.johndoe.com',
-    email: 'john@example.com',
+    email: '',
     phone: '+1 (555) 123-4567',
     joinDate: 'January 2023',
     followers: 1234,
     following: 567,
     posts: 89
   });
+
+  // Load user data from localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        setProfileData(prev => ({
+          ...prev,
+          name: userData.name || userData.email?.split('@')[0] || 'User',
+          username: '@' + (userData.name?.toLowerCase().replace(/\s+/g, '') || userData.email?.split('@')[0] || 'user'),
+          email: userData.email || '',
+          phone: userData.contact || '+1 (555) 123-4567'
+        }));
+      } catch {
+        // Handle old string format
+        setProfileData(prev => ({
+          ...prev,
+          name: storedUser.split('@')[0] || 'User',
+          username: '@' + storedUser.split('@')[0] || '@user',
+          email: storedUser || ''
+        }));
+      }
+    }
+  }, []);
 
   const [tempData, setTempData] = useState(profileData);
 
@@ -41,6 +66,24 @@ export default function Profile() {
     }));
   };
 
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setProfilePicture(imageUrl);
+      localStorage.setItem('profilePicture', imageUrl);
+    }
+  };
+
+  const handleBackgroundPhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setBackgroundPhoto(imageUrl);
+      localStorage.setItem('backgroundPhoto', imageUrl);
+    }
+  };
+
   // Sample user posts for the profile
   const userPosts = [
     { id: 1, image: "https://picsum.photos/300/300?random=1", likes: 42, comments: 8 },
@@ -56,11 +99,24 @@ export default function Profile() {
       {/* Header Section */}
       <div className="relative">
         {/* Cover Photo */}
-        <div className="h-64 bg-gradient-to-r from-blue-600 to-purple-600 relative">
-          <div className="absolute inset-0 bg-black bg-opacity-30"></div>
-          <button className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-70 transition-all">
+        <div className="relative h-64 bg-gradient-to-r from-blue-600 to-purple-600 rounded-t-lg overflow-hidden">
+          {backgroundPhoto && (
+            <img
+              src={backgroundPhoto}
+              alt="Background"
+              className="w-full h-full object-cover"
+            />
+          )}
+          <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+          <label className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-70 transition-all cursor-pointer">
             <Camera size={20} />
-          </button>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleBackgroundPhotoChange}
+              className="hidden"
+            />
+          </label>
         </div>
 
         {/* Profile Info */}
@@ -69,13 +125,19 @@ export default function Profile() {
           <div className="flex items-end -mt-16 mb-4">
             <div className="relative">
               <img
-                src="https://i.pravatar.cc/120"
+                src={profilePicture}
                 alt="Profile"
-                className="w-32 h-32 rounded-full border-4 border-gray-800 bg-gray-800"
+                className="w-32 h-32 rounded-full border-4 border-gray-800 bg-gray-800 object-cover"
               />
-              <button className="absolute bottom-2 right-2 p-2 bg-blue-600 rounded-full hover:bg-blue-700 transition-colors">
+              <label className="absolute bottom-2 right-2 p-2 bg-blue-600 rounded-full hover:bg-blue-700 transition-colors cursor-pointer">
                 <Camera size={16} />
-              </button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleProfilePictureChange}
+                  className="hidden"
+                />
+              </label>
             </div>
             <div className="ml-6 flex-1">
               <div className="flex items-center justify-between">
@@ -135,53 +197,6 @@ export default function Profile() {
               <p className="text-gray-300 mb-4">{profileData.bio}</p>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-400">
-              <div className="flex items-center gap-2">
-                <MapPin size={16} />
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={tempData.location}
-                    onChange={(e) => handleInputChange('location', e.target.value)}
-                    className="bg-gray-800 border border-gray-600 rounded px-2 py-1 flex-1"
-                  />
-                ) : (
-                  <span>{profileData.location}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <Globe size={16} />
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={tempData.website}
-                    onChange={(e) => handleInputChange('website', e.target.value)}
-                    className="bg-gray-800 border border-gray-600 rounded px-2 py-1 flex-1"
-                  />
-                ) : (
-                  <a href={`https://${profileData.website}`} className="text-blue-400 hover:underline">
-                    {profileData.website}
-                  </a>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail size={16} />
-                {isEditing ? (
-                  <input
-                    type="email"
-                    value={tempData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="bg-gray-800 border border-gray-600 rounded px-2 py-1 flex-1"
-                  />
-                ) : (
-                  <span>{profileData.email}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar size={16} />
-                <span>Joined {profileData.joinDate}</span>
-              </div>
-            </div>
           </div>
 
           {/* Stats */}

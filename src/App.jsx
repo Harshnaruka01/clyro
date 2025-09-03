@@ -22,6 +22,16 @@ export default function App() {
     return null;
   });
 
+  const [profilePicture, setProfilePicture] = useState(() => {
+    // Clear any existing custom profile pictures and use default
+    localStorage.removeItem('profilePicture');
+    return '/src/assets/default_photo.jpg';
+  });
+
+  const [backgroundPhoto, setBackgroundPhoto] = useState(() => {
+    return localStorage.getItem('backgroundPhoto') || null;
+  });
+
   // If user is not logged in, show auth pages
   if (!user) {
     return (
@@ -42,7 +52,7 @@ export default function App() {
             <div className="flex h-screen">
               <Sidebar />
               <div className="flex flex-col flex-1">
-                <Navbar user={user} setUser={setUser} />
+                <Navbar user={user} setUser={setUser} profilePicture={profilePicture} />
                 <Feed />
               </div>
             </div>
@@ -51,9 +61,14 @@ export default function App() {
             <div className="flex h-screen">
               <Sidebar />
               <div className="flex flex-col flex-1">
-                <Navbar user={user} setUser={setUser} />
+                <Navbar user={user} setUser={setUser} profilePicture={profilePicture} />
                 <div className="flex-1 overflow-y-auto">
-                  <Profile />
+                  <Profile 
+                    profilePicture={profilePicture} 
+                    setProfilePicture={setProfilePicture}
+                    backgroundPhoto={backgroundPhoto}
+                    setBackgroundPhoto={setBackgroundPhoto}
+                  />
                 </div>
               </div>
             </div>
