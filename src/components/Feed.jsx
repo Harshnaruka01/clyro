@@ -86,7 +86,7 @@ export default function Feed() {
   };
 
   return (
-    <main className="flex-1 p-4 md:p-6">
+    <main className="flex-1 p-4 md:p-6 flex flex-col items-center">
       {/* Create Post Button */}
       {/* <div className="mb-6 flex justify-center">
         <label className="cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition">
@@ -102,7 +102,7 @@ export default function Feed() {
       </div> */}
 
       {/* Posts Grid */}
-      <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 transition-all duration-300 ${selectedPost ? 'blur-[1px]' : ''}`}>
+      <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 transition-all duration-300 max-w-4xl w-full ${selectedPost ? 'blur-[1px]' : ''}`}>
         {posts.map((post) => {
           const displayTitle = post.id === 1 ? 'lakshya 2k25' : post.title;
           return (

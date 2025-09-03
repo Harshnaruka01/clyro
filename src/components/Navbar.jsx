@@ -6,6 +6,18 @@ export default function Navbar({ user, setUser }) {
     setUser(null);
   };
 
+  // Parse user data to get the name
+  const getUserName = () => {
+    if (typeof user === 'string') {
+      // Old format - just email
+      return user.split('@')[0]; // Show part before @ as fallback
+    } else if (user && typeof user === 'object') {
+      // New format - user object with name
+      return user.name || user.email?.split('@')[0] || 'User';
+    }
+    return 'User';
+  };
+
   return (
     <header className="bg-gray-800 shadow-lg border-b border-gray-700 p-4 flex justify-between items-center">
       <input
@@ -16,7 +28,7 @@ export default function Navbar({ user, setUser }) {
       <div className="flex items-center gap-4">
         <Bell className="cursor-pointer hover:text-blue-400 text-gray-300" />
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-300">{user}</span>
+          <span className="text-sm text-gray-300">{getUserName()}</span>
           <img
             src="https://i.pravatar.cc/40"
             alt="User"

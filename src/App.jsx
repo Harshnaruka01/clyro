@@ -10,7 +10,17 @@ import Signup from "./components/Signup";
 import { PostsProvider } from "./context/PostsContext";
 
 export default function App() {
-  const [user, setUser] = useState(localStorage.getItem('user') || null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        return JSON.parse(storedUser);
+      } catch {
+        return storedUser; // fallback for old string format
+      }
+    }
+    return null;
+  });
 
   // If user is not logged in, show auth pages
   if (!user) {

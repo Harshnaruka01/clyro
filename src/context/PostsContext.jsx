@@ -20,28 +20,13 @@ export const PostsProvider = ({ children }) => {
     {
       id: 2,
       photos: ["https://picsum.photos/300/350"],
-      title: "Post 2"
+      title: "fresher 2k25"
     },
     {
       id: 3,
       photos: ["https://picsum.photos/300/500"],
-      title: "Post 3"
-    },
-    {
-      id: 4,
-      photos: ["https://picsum.photos/300/450"],
-      title: "Post 4"
-    },
-    {
-      id: 5,
-      photos: ["https://picsum.photos/300/300"],
-      title: "Post 5"
-    },
-    {
-      id: 6,
-      photos: ["https://picsum.photos/300/360"],
-      title: "Post 6"
-    },
+      title: "Dandiya Night"
+    }
   ]);
 
   const addPhotosToPost = (postId, newPhotos) => {

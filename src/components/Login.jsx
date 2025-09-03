@@ -1,18 +1,38 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './firebase';
 
 function Login({ setUser }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Mock auth
-    if (email && password) {
-      localStorage.setItem('user', email);
-      setUser(email); // update user state in App
-      navigate('/dashboard'); // ✅ redirect to Dashboard
+    setLoading(true);
+    setError('');
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      // Store user info as object (consistent with signup)
+      const userInfo = {
+        email: user.email,
+        name: user.displayName || user.email.split('@')[0],
+        uid: user.uid
+      };
+      localStorage.setItem('user', JSON.stringify(userInfo));
+      setUser(userInfo);
+      navigate('/');
+    } catch (error) {
+      setError(error.message);
+      console.error('Login error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,12 +71,19 @@ function Login({ setUser }) {
             </div>
           </div>
 
+          {error && (
+            <div className="text-red-400 text-sm text-center bg-red-900/20 border border-red-800 rounded-md p-3">
+              {error}
+            </div>
+          )}
+
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+              disabled={loading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign in
+              {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
 
