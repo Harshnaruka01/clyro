@@ -32,6 +32,8 @@ export default function App() {
     return localStorage.getItem('backgroundPhoto') || null;
   });
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   // If user is not logged in, show auth pages
   if (!user) {
     return (
@@ -50,18 +52,28 @@ export default function App() {
         <Routes>
           <Route path="/" element={
             <div className="flex h-screen">
-              <Sidebar />
-              <div className="flex flex-col flex-1">
-                <Navbar user={user} setUser={setUser} profilePicture={profilePicture} />
+              <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+              <div className="flex flex-col flex-1 md:ml-0">
+                <Navbar 
+                  user={user} 
+                  setUser={setUser} 
+                  profilePicture={profilePicture} 
+                  onMenuClick={() => setSidebarOpen(true)}
+                />
                 <Feed />
               </div>
             </div>
           } />
           <Route path="/profile" element={
             <div className="flex h-screen">
-              <Sidebar />
-              <div className="flex flex-col flex-1">
-                <Navbar user={user} setUser={setUser} profilePicture={profilePicture} />
+              <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+              <div className="flex flex-col flex-1 md:ml-0">
+                <Navbar 
+                  user={user} 
+                  setUser={setUser} 
+                  profilePicture={profilePicture} 
+                  onMenuClick={() => setSidebarOpen(true)}
+                />
                 <div className="flex-1 overflow-y-auto">
                   <Profile 
                     profilePicture={profilePicture} 

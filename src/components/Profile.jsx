@@ -96,10 +96,10 @@ export default function Profile({ profilePicture, setProfilePicture, backgroundP
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      {/* Header Section */}
+      {/* Header Section - Mobile optimized */}
       <div className="relative">
         {/* Cover Photo */}
-        <div className="relative h-64 bg-gradient-to-r from-blue-600 to-purple-600 rounded-t-lg overflow-hidden">
+        <div className="relative h-48 sm:h-56 md:h-64 bg-gradient-to-r from-blue-600 to-purple-600 rounded-t-lg overflow-hidden">
           {backgroundPhoto && (
             <img
               src={backgroundPhoto}
@@ -108,8 +108,8 @@ export default function Profile({ profilePicture, setProfilePicture, backgroundP
             />
           )}
           <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-          <label className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-70 transition-all cursor-pointer">
-            <Camera size={20} />
+          <label className="absolute top-2 sm:top-4 right-2 sm:right-4 p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-70 transition-all cursor-pointer">
+            <Camera size={16} className="sm:w-5 sm:h-5" />
             <input
               type="file"
               accept="image/*"
@@ -119,18 +119,18 @@ export default function Profile({ profilePicture, setProfilePicture, backgroundP
           </label>
         </div>
 
-        {/* Profile Info */}
-        <div className="relative px-6 pb-6">
+        {/* Profile Info - Mobile optimized */}
+        <div className="relative px-3 sm:px-4 md:px-6 pb-4 sm:pb-6">
           {/* Profile Picture */}
-          <div className="flex items-end -mt-16 mb-4">
-            <div className="relative">
+          <div className="flex flex-col sm:flex-row sm:items-end -mt-12 sm:-mt-16 mb-4">
+            <div className="relative mx-auto sm:mx-0">
               <img
                 src={profilePicture}
                 alt="Profile"
-                className="w-32 h-32 rounded-full border-4 border-gray-800 bg-gray-800 object-cover"
+                className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full border-4 border-gray-800 bg-gray-800 object-cover"
               />
-              <label className="absolute bottom-2 right-2 p-2 bg-blue-600 rounded-full hover:bg-blue-700 transition-colors cursor-pointer">
-                <Camera size={16} />
+              <label className="absolute bottom-1 sm:bottom-2 right-1 sm:right-2 p-1.5 sm:p-2 bg-blue-600 rounded-full hover:bg-blue-700 transition-colors cursor-pointer">
+                <Camera size={14} className="sm:w-4 sm:h-4" />
                 <input
                   type="file"
                   accept="image/*"
@@ -139,33 +139,33 @@ export default function Profile({ profilePicture, setProfilePicture, backgroundP
                 />
               </label>
             </div>
-            <div className="ml-6 flex-1">
-              <div className="flex items-center justify-between">
+            <div className="sm:ml-4 md:ml-6 flex-1 text-center sm:text-left mt-4 sm:mt-0">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   {isEditing ? (
                     <input
                       type="text"
                       value={tempData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
-                      className="text-2xl font-bold bg-gray-800 border border-gray-600 rounded px-3 py-1 mb-1"
+                      className="text-xl sm:text-2xl font-bold bg-gray-800 border border-gray-600 rounded px-3 py-1 mb-1 w-full sm:w-auto"
                     />
                   ) : (
-                    <h1 className="text-2xl font-bold">{profileData.name}</h1>
+                    <h1 className="text-xl sm:text-2xl font-bold">{profileData.name}</h1>
                   )}
-                  <p className="text-gray-400">{profileData.username}</p>
+                  <p className="text-gray-400 text-sm sm:text-base">{profileData.username}</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 justify-center sm:justify-start">
                   {isEditing ? (
                     <>
                       <button
                         onClick={handleSave}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                        className="px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-sm sm:text-base"
                       >
                         Save
                       </button>
                       <button
                         onClick={handleCancel}
-                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors"
+                        className="px-3 sm:px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors text-sm sm:text-base"
                       >
                         Cancel
                       </button>
@@ -173,10 +173,11 @@ export default function Profile({ profilePicture, setProfilePicture, backgroundP
                   ) : (
                     <button
                       onClick={handleEdit}
-                      className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+                      className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm sm:text-base"
                     >
-                      <Edit3 size={16} />
-                      Edit Profile
+                      <Edit3 size={14} className="sm:w-4 sm:h-4" />
+                      <span className="hidden sm:inline">Edit Profile</span>
+                      <span className="sm:hidden">Edit</span>
                     </button>
                   )}
                 </div>
@@ -184,48 +185,47 @@ export default function Profile({ profilePicture, setProfilePicture, backgroundP
             </div>
           </div>
 
-          {/* Bio and Info */}
-          <div className="mb-6">
+          {/* Bio and Info - Mobile optimized */}
+          <div className="mb-4 sm:mb-6">
             {isEditing ? (
               <textarea
                 value={tempData.bio}
                 onChange={(e) => handleInputChange('bio', e.target.value)}
-                className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 mb-4 resize-none"
+                className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 mb-4 resize-none text-sm sm:text-base"
                 rows="3"
               />
             ) : (
-              <p className="text-gray-300 mb-4">{profileData.bio}</p>
+              <p className="text-gray-300 mb-4 text-sm sm:text-base text-center sm:text-left">{profileData.bio}</p>
             )}
-
           </div>
 
-          {/* Stats */}
-          <div className="flex gap-8 mb-8">
+          {/* Stats - Mobile optimized */}
+          <div className="flex justify-center sm:justify-start gap-6 sm:gap-8 mb-6 sm:mb-8">
             <div className="text-center">
-              <div className="text-2xl font-bold">{profileData.posts}</div>
-              <div className="text-gray-400 text-sm">Posts</div>
+              <div className="text-xl sm:text-2xl font-bold">{profileData.posts}</div>
+              <div className="text-gray-400 text-xs sm:text-sm">Posts</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold">{profileData.followers.toLocaleString()}</div>
-              <div className="text-gray-400 text-sm">Followers</div>
+              <div className="text-xl sm:text-2xl font-bold">{profileData.followers.toLocaleString()}</div>
+              <div className="text-gray-400 text-xs sm:text-sm">Followers</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold">{profileData.following}</div>
-              <div className="text-gray-400 text-sm">Following</div>
+              <div className="text-xl sm:text-2xl font-bold">{profileData.following}</div>
+              <div className="text-gray-400 text-xs sm:text-sm">Following</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Posts Grid */}
-      <div className="px-6">
-        <div className="border-t border-gray-700 pt-8">
-          <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-            <Users size={20} />
+      {/* Posts Grid - Mobile optimized */}
+      <div className="px-3 sm:px-4 md:px-6">
+        <div className="border-t border-gray-700 pt-6 sm:pt-8">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 flex items-center gap-2 justify-center sm:justify-start">
+            <Users size={18} className="sm:w-5 sm:h-5" />
             My Posts
           </h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
             {userPosts.map(post => (
               <div key={post.id} className="relative group cursor-pointer">
                 <img
@@ -234,14 +234,14 @@ export default function Profile({ profilePicture, setProfilePicture, backgroundP
                   className="w-full aspect-square object-cover rounded-lg"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
-                  <div className="flex items-center gap-4 text-white">
+                  <div className="flex items-center gap-2 sm:gap-4 text-white">
                     <div className="flex items-center gap-1">
-                      <Heart size={20} />
-                      <span>{post.likes}</span>
+                      <Heart size={16} className="sm:w-5 sm:h-5" />
+                      <span className="text-xs sm:text-sm">{post.likes}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <MessageCircle size={20} />
-                      <span>{post.comments}</span>
+                      <MessageCircle size={16} className="sm:w-5 sm:h-5" />
+                      <span className="text-xs sm:text-sm">{post.comments}</span>
                     </div>
                   </div>
                 </div>
