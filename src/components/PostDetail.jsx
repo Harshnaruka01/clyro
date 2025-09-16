@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { usePosts } from '../context/PostsContext';
+import { assignUsersToPost, getRandomUser } from '../utils/mockUsers';
 
 export default function PostDetail() {
   const { postId } = useParams();
@@ -149,9 +150,32 @@ export default function PostDetail() {
       {/* Main Content - Mobile optimized */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Post Info */}
-        <div className="mb-4 sm:mb-6 text-center">
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2">{post.title}</h2>
-          <p className="text-gray-300 text-sm sm:text-base lg:text-lg">{post.photos.length} photo{post.photos.length !== 1 ? 's' : ''}</p>
+        <div className="mb-4 sm:mb-6">
+          {/* User info */}
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div 
+              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => {
+                const postUser = assignUsersToPost(post.id);
+                navigate(`/user/${postUser.id}`);
+              }}
+            >
+              <img
+                src={assignUsersToPost(post.id).profilePicture}
+                alt={assignUsersToPost(post.id).name}
+                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-3 border-gray-600 shadow-lg"
+              />
+              <div className="text-left">
+                <h3 className="text-lg sm:text-xl font-bold text-white">{assignUsersToPost(post.id).name}</h3>
+                <p className="text-gray-400 text-sm sm:text-base">{assignUsersToPost(post.id).username}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-center">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2">{post.title}</h2>
+            <p className="text-gray-300 text-sm sm:text-base lg:text-lg">{post.photos.length} photo{post.photos.length !== 1 ? 's' : ''}</p>
+          </div>
         </div>
 
         {/* Photos Grid - Responsive columns */}
@@ -242,15 +266,29 @@ export default function PostDetail() {
                 {/* Show existing comments - Mobile optimized */}
                 {(photoComments[index] || []).length > 0 && (
                   <div className="mt-3 space-y-2">
-                    {photoComments[index].map((comment) => (
-                      <div key={comment.id} className="text-xs bg-gray-700 p-2 rounded">
-                        <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className="font-medium text-white">{comment.author}</span>
-                          <span className="text-gray-400 text-xs">{comment.timestamp}</span>
+                    {photoComments[index].map((comment) => {
+                      const commentUser = getRandomUser();
+                      return (
+                        <div key={comment.id} className="text-xs bg-gray-700 p-2 rounded">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <img
+                              src={commentUser.profilePicture}
+                              alt={commentUser.name}
+                              className="w-5 h-5 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                              onClick={() => navigate(`/user/${commentUser.id}`)}
+                            />
+                            <span 
+                              className="font-medium text-white cursor-pointer hover:text-blue-400 transition-colors"
+                              onClick={() => navigate(`/user/${commentUser.id}`)}
+                            >
+                              {commentUser.name}
+                            </span>
+                            <span className="text-gray-400 text-xs">{comment.timestamp}</span>
+                          </div>
+                          <p className="text-gray-200 break-words">{comment.text}</p>
                         </div>
-                        <p className="text-gray-200 break-words">{comment.text}</p>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
                </div>

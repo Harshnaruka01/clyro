@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePosts } from '../context/PostsContext';
+import { assignUsersToPost } from '../utils/mockUsers';
 
 export default function Feed() {
   const navigate = useNavigate();
@@ -107,9 +108,30 @@ export default function Feed() {
                 onError={() => handleImageError(post.id, 0)}
                 style={{ filter: 'brightness(60%)', borderRadius: '0.75rem' }}
               />
-              {/* Title overlay at bottom-left, responsive text size */}
-              <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 text-white font-extrabold text-lg sm:text-xl md:text-2xl drop-shadow pointer-events-none select-none transition-all duration-300 group-hover:text-pink-400 group-hover:scale-105" style={{textShadow: '0 1px 2px rgba(0,0,0,0.4)'}}>
-                {displayTitle}
+              {/* User info and title overlay */}
+              <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4">
+                {/* User info */}
+                <div 
+                  className="flex items-center gap-2 mb-2 cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const postUser = assignUsersToPost(post.id);
+                    navigate(`/user/${postUser.id}`);
+                  }}
+                >
+                  <img
+                    src={assignUsersToPost(post.id).profilePicture}
+                    alt={assignUsersToPost(post.id).name}
+                    className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border-2 border-white shadow-lg"
+                  />
+                  <span className="text-white text-sm sm:text-base font-medium drop-shadow" style={{textShadow: '0 1px 2px rgba(0,0,0,0.8)'}}>
+                    {assignUsersToPost(post.id).name}
+                  </span>
+                </div>
+                {/* Title */}
+                <div className="text-white font-extrabold text-lg sm:text-xl md:text-2xl drop-shadow pointer-events-none select-none transition-all duration-300 group-hover:text-pink-400 group-hover:scale-105" style={{textShadow: '0 1px 2px rgba(0,0,0,0.4)'}}>
+                  {displayTitle}
+                </div>
               </div>
               {/* ...existing code for grid preview, upload, etc... */}
               {post.photos.length > 1 && (

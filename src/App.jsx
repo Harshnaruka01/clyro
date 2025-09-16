@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Feed from "./components/Feed";
 import PostDetail from "./components/PostDetail";
 import Profile from "./components/Profile";
+import UserProfile from "./components/UserProfile";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import { PostsProvider } from "./context/PostsContext";
@@ -80,11 +81,13 @@ export default function App() {
                     setProfilePicture={setProfilePicture}
                     backgroundPhoto={backgroundPhoto}
                     setBackgroundPhoto={setBackgroundPhoto}
+                    isOwnProfile={true}
                   />
                 </div>
               </div>
             </div>
           } />
+          <Route path="/user/:userId" element={<UserProfile />} />
           <Route path="/post/:postId" element={<PostDetail />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
