@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { ClerkProvider } from '@clerk/clerk-react';
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-react';
 import Login from './components/Login';
 import './App.css';
 
@@ -12,13 +12,19 @@ function App() {
     <ClerkProvider publishableKey={clerkPubKey}>
       <Routes>
         <Route path="/auth/*" element={<Login />} />
-        <Route path="/" element={
-          <>
-            <div>Welcome to your dashboard!</div>
-            {/* You can add your protected content here */}
-          </>
-        } />
-        <Route path="*" element={<Navigate to="/auth" replace />} />
+        <Route
+          path="/"
+          element={
+            <>
+              <SignedIn>
+                <div>Welcome to your dashboard!</div>
+              </SignedIn>
+              <SignedOut>
+                <Navigate to="/auth/sign-in" replace />
+              </SignedOut>
+            </>
+          }
+        />
       </Routes>
     </ClerkProvider>
   );

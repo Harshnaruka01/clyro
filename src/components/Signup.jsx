@@ -8,8 +8,12 @@ function SignUp() {
         routing="path"
         path="/auth/sign-up"
         signInUrl="/auth/sign-in"
-        afterSignUpUrl="/"
-        redirectUrl="/"
+        fallbackRedirectUrl="/"
+        appearance={{
+          elements: {
+            card: 'shadow-none',
+          },
+        }}
       />
     </div>
   );
