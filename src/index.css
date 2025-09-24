@@ -1,27 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Global Dark Theme Styles */
-body {
-  background-color: #111827; /* bg-gray-900 */
-  color: #f9fafb; /* text-gray-50 */
-}
-
-/* Custom scrollbar for dark theme */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #374151; /* bg-gray-700 */
-}
-
-::-webkit-scrollbar-thumb {
-  background: #6b7280; /* bg-gray-500 */
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af; /* bg-gray-400 */
-}
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
