@@ -1,7 +1,9 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-react';
-import Login from './components/Login';
+import Landing from './pages/Landing';
+import Dashboard from './pages/Dashboard';
+import Auth from './pages/Auth';
 import './App.css';
 
 // Get the publishable key from environment variables
@@ -11,18 +13,26 @@ function App() {
   return (
     <ClerkProvider publishableKey={clerkPubKey}>
       <Routes>
-        <Route path="/auth/*" element={<Login />} />
+        <Route path="/auth/*" element={<Auth />} />
         <Route
           path="/"
           element={
             <>
               <SignedIn>
-                <div>Welcome to your dashboard!</div>
+                <Navigate to="/dashboard" replace />
               </SignedIn>
               <SignedOut>
-                <Navigate to="/auth/sign-in" replace />
+                <Landing />
               </SignedOut>
             </>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <SignedIn>
+              <Dashboard />
+            </SignedIn>
           }
         />
       </Routes>
